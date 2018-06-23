@@ -1,0 +1,11 @@
+#!/bin/sh
+
+which nkf clang-format || (echo "Error: some command not available"; exit 1) || exit 1
+
+(
+	cd "$(dirname "$0")"
+    git ls-files | grep -e '.*\.cpp$' -e '.*\.hpp$' | xargs sed -i 's/#pragma/\/\/#pragma/g'
+	git ls-files | grep -e '.*\.cpp$' -e '.*\.hpp$' | xargs clang-format -i
+    git ls-files | grep -e '.*\.cpp$' -e '.*\.hpp$' | xargs sed -i 's/\/\/#pragma/#pragma/g'
+	git ls-files | grep -e '.*\.cpp$' -e '.*\.hpp$' | xargs nkf --in-place -Lw --oc=utf-8-bom
+)
