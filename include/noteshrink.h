@@ -1,13 +1,15 @@
 #pragma once
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
 typedef struct {
-    char R;
-    char G;
-    char B;
+    float R; // [0, 255]
+    float G;
+    float B;
 } NSHRgb;
 
 
@@ -15,7 +17,6 @@ typedef struct {
     float SampleFraction;
     float BrightnessThreshold;
     float SaturationThreshold;
-    int NumColors;
     int KmeansMaxIter;
     bool Saturate;
     bool WhiteBackground;
