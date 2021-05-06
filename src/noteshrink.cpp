@@ -34,9 +34,9 @@ static void Quantize(std::vector<NSHRgb> const& image, int bitsPerChannel, std::
     quantized.reserve(image.size());
 
     for (size_t i = 0; i < image.size(); i++) {
-        uint32_t r = (uint8_t(image[i].R) >> shift) << shift + halfbin;
-        uint32_t g = (uint8_t(image[i].G) >> shift) << shift + halfbin;
-        uint32_t b = (uint8_t(image[i].B) >> shift) << shift + halfbin;
+        uint32_t r = ((uint8_t(image[i].R) >> shift) << shift) + halfbin;
+        uint32_t g = ((uint8_t(image[i].G) >> shift) << shift) + halfbin;
+        uint32_t b = ((uint8_t(image[i].B) >> shift) << shift) + halfbin;
         uint32_t p = (((r << 8) | g) << 8) | b;
         quantized.push_back(p);
     }
