@@ -1,7 +1,9 @@
 ﻿#include "noteshrink.h"
 
-#include <algorithm>
 #include <cassert>
+#include <cmath>
+
+#include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <map>
