@@ -321,6 +321,10 @@ extern "C" bool NSHCreatePalette(NSHRgb* input, size_t inputSize, NSHOption opti
     std::vector<NSHRgb> pal(paletteSize);
     CreatePalette(samples, option, pal, bgColor);
 
+    for (int i = 0; i < paletteSize; i++) {
+        palette[i] = pal[i];
+    }
+
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = end - start;
     std::cout << (1e9 / std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count()) << " fps" << std::endl;
