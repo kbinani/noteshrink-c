@@ -149,7 +149,7 @@ static NSHRgb FindBackgroundColor(std::vector<NSHRgb> const& image, int bitsPerC
 }
 
 
-void CreateForegroundMask(NSHRgb bgColor, std::vector<NSHRgb> const& samples, NSHOption option, std::vector<bool>& mask)
+static void CreateForegroundMask(NSHRgb bgColor, std::vector<NSHRgb> const& samples, NSHOption option, std::vector<bool>& mask)
 {
     float hBg, sBg, vBg;
     RgbToHsv(bgColor, hBg, sBg, vBg);
@@ -309,8 +309,6 @@ extern "C" NSHOption NSHMakeDefaultOption()
 
 extern "C" bool NSHCreatePalette(NSHRgb* input, size_t inputSize, NSHOption option, NSHRgb* palette, size_t paletteSize)
 {
-    auto start = std::chrono::high_resolution_clock::now();
-
     if (!input || !palette) {
         return false;
     }
@@ -327,7 +325,5 @@ extern "C" bool NSHCreatePalette(NSHRgb* input, size_t inputSize, NSHOption opti
         palette[i] = pal[i];
     }
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = end - start;
-    std::cout << (1e9 / std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count()) << " fps" << std::endl;
+    return true;
 }
