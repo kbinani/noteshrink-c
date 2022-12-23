@@ -21,6 +21,7 @@ typedef struct {
     float BrightnessThreshold;
     float SaturationThreshold;
     int KmeansMaxIter;
+    int NumColors = 6;
     bool Saturate;
     bool WhiteBackground;
 } NSHOption;

@@ -468,6 +468,7 @@ extern "C" NSHOption NSHMakeDefaultOption()
     o.KmeansMaxIter = 40;
     o.Saturate = false;
     o.WhiteBackground = false;
+    o.NumColors = 6;
     return o;
 }
 

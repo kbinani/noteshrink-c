@@ -3,19 +3,81 @@
 #include <stb/stb_image_write.h>
 #include <string>
 #include <vector>
+#include <unistd.h>
+
+void NoteshrinkUsage(char* prog, NSHOption o)
+{
+    printf("NoteShrink.\n");
+    printf("usage: %s [options] image_im image_out\n", prog);
+    printf("options:\n");
+    printf("  -k NUM_ITERS      number of iterations KMeans (default %d)\n", o.KmeansMaxIter);
+    printf("  -n NUM_COLORS     number of output colors (default %d)\n", o.NumColors);
+    printf("  -p NUM            part of pixels to sample (default %f)\n", o.SampleFraction);
+    printf("  -s NUM            background saturation threshold (default %f)\n", o.SaturationThreshold);
+    printf("  -v NUM            background value threshold (default %f)\n", o.BrightnessThreshold);
+    printf("  -w                make background white (default %d)\n", o.WhiteBackground);
+    printf("  -S                do not saturate colors (default %d)\n", o.Saturate);
+    printf("  -h                show this help message and exit\n");
+}
 
 int main(int argc, char **argv)
 {
+    NSHOption o = NSHMakeDefaultOption();
+    int fhelp = 0;
     if (argc < 3)
     {
-        printf("usage: %s image_im image_out\n", argv[0]);
+        NoteshrinkUsage(argv[0], o);
+        return 0;
     }
     else
     {
-        std::string file(argv[1]);
+        int opt;
+        while ((opt = getopt(argc, argv, ":k:n:p:s:v:wSh")) != -1)
+        {
+            switch(opt)
+            {
+            case 'k':
+                o.KmeansMaxIter = atoi(optarg);
+                break;
+            case 'n':
+                o.NumColors = atoi(optarg);
+                break;
+            case 'p':
+                o.SampleFraction = atof(optarg);
+                break;
+            case 's':
+                o.SaturationThreshold = atof(optarg);
+                break;
+            case 'v':
+                o.BrightnessThreshold = atof(optarg);
+                break;
+            case 'w':
+                o.WhiteBackground = !o.WhiteBackground;
+                break;
+            case 'S':
+                o.Saturate = !o.Saturate;
+                break;
+            case 'h':
+                fhelp = 1;
+                break;
+            case ':':
+                printf("option needs a value\n");
+                break;
+            case '?':
+                printf("unknown option: %c\n", optopt);
+                break;
+            }
+        }
+        if(optind + 2 > argc || fhelp)
+        {
+            NoteshrinkUsage(argv[0], o);
+            return 0;
+        }
+        std::string filein(argv[optind]);
+        std::string fileout(argv[optind + 1]);
 
         int width, height, bpp;
-        stbi_uc* pixels = stbi_load(file.c_str(), &width, &height, &bpp, STBI_rgb_alpha);
+        stbi_uc* pixels = stbi_load(filein.c_str(), &width, &height, &bpp, STBI_rgb_alpha);
         std::vector<NSHRgb> img(width * height);
 
         size_t i = 0;
@@ -33,8 +95,7 @@ int main(int argc, char **argv)
         }
         free(pixels);
 
-        NSHOption o = NSHMakeDefaultOption();
-        std::vector<NSHRgb> palette(8);
+        std::vector<NSHRgb> palette(o.NumColors);
         std::vector<NSHRgb> result;
         NSHCreatePalette(img, img.size(), o, palette.data(), palette.size(), result, width, height);
         std::vector<NSHRgb> temVector;
@@ -57,7 +118,7 @@ int main(int argc, char **argv)
             }
         }
         printf("done");
-        stbi_write_png(argv[2], width, height, numberOfChannels, data, width * numberOfChannels);
+        stbi_write_png(fileout.c_str(), width, height, numberOfChannels, data, width * numberOfChannels);
     }
     return 0;
 }
