@@ -21,3 +21,17 @@ cmake ..
 make
 ```
 
+## Demo
+
+```sh
+./noteshrink images/test.jpg images/testout.png
+optipng images/testout.png
+```
+
+`images/test.jpg`:  
+![test](images/test.jpg)
+**35113** bytes.
+
+`images/testout.png`:  
+![testout](images/testout.png)
+**7281** bytes.
