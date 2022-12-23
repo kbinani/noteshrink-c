@@ -1,8 +1,9 @@
 #pragma once
 
-#include <stddef.h>
-#include <stdint.h>
-#include <stdbool.h>
+#include <cstddef>
+#include <cstdint>
+#include <cstdbool>
+#include <vector>
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,7 +28,7 @@ typedef struct {
 
 extern NSHOption NSHMakeDefaultOption();
 
-extern bool NSHCreatePalette(NSHRgb *input, size_t inputSize, NSHOption option, NSHRgb *palette, size_t paletteSize);
+extern bool NSHCreatePalette(std::vector<NSHRgb>& input, size_t inputSize, NSHOption option, NSHRgb* palette, size_t paletteSize, std::vector<NSHRgb>& result, int width, int height);
 
 #ifdef __cplusplus
 } // extern "C"

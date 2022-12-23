@@ -5,10 +5,9 @@ if (APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 endif()
 
-include_directories(include test/ext)
+include_directories(include src/ext)
 
 file(GLOB source_files include/*.h
                        src/*.cpp
-                       test/*.cpp
                        CMakeLists.txt)
-add_executable(noteshrink-c-test ${source_files})
+add_executable(noteshrink ${source_files})
